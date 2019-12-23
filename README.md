@@ -15,3 +15,5 @@ The easiest way to deploy the connector is to use the [Heroku platform](https://
 
 ## Configuration in Primo
 To add the "Pay Fines" link to Primo, follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/020Primo_VE/Library_Card_Configuration/Configuring_the_Pay_Fine_Link_for_Primo_VE). Be sure to include a `?` at the end of the URL. For example, if your Heroku URL is `https://exl-touchnet-connector-myuni.herokuapps.com`, configure the following in Primo: `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?`.
+
+![Primo](https://drive.google.com/uc?export=view&id=1gAPGA-c4Lza5Koa-3_H4leC1SePh90RU)
