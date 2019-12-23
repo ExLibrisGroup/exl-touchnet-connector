@@ -1,0 +1,17 @@
+{
+  "name": "Ex Libris-Touchnet Connector",
+  "description": "Connector between Ex Libris Alma and Primo and the Touchnet payment system.",
+  "repository": "https://github.com/ExLibrisGroup/exl-touchnet-connector",
+  "env": {
+    "ALMA_APIKEY": {
+      "description": "Alma API Key. Obtain at https://developers.exlibrisgroup.com/alma/apis"
+    },
+    "UPAY_SITE_ID": {
+      "description": "uPay Site ID. Obtain from Touchnet customer service."
+    },
+    "UPAY_SITE_URL": {
+      "description": "uPay Site URL. Obtain from Touchnet customer service."
+    }
+  },
+  "success_url": "/touchnet"
+}
