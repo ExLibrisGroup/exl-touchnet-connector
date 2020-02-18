@@ -4,7 +4,7 @@ This connector enables libraries from universities that use [Touchnet](https://w
 ## Overview
 This connector performs the following tasks:
 * Set up the payment in Touchnet and redirect to the Touchnet site for payment
-* Receive the response from Touchnet and post the paynent to Alma
+* Receive the response from Touchnet and post the payment to Alma
 * Redirect the user back to Primo
 
 ![EXL Touchnet Connector Flow](https://i.postimg.cc/R04xpMGJ/exl-touchnet-flow.png)
@@ -19,7 +19,7 @@ In order to use the connector, you need to coordinate with Touchnet customer ser
 In addition, you'll need an API key for Alma. Instructions for obtaining an API key are available at the [Ex Libris Developer Network](https://developers.exlibrisgroup.com/alma/apis). The API key should include read/write permissions for "users". The API key is stored in the `ALMA_APIKEY` environment variable.
 
 ### Deploying to Heroku
-The easiest way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has free plans (which could be appropriate depending on the level of usage) or very reasonable "hobby" plans. To deploy to Heroku, gather the parameters specified above and then click on teh link below to sign up and deploy the connector. 
+The easiest way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has free plans (which could be appropriate depending on the level of usage) or very reasonable "hobby" plans. To deploy to Heroku, gather the parameters specified above and then click on the link below to sign up and deploy the connector. 
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
