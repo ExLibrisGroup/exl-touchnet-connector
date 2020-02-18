@@ -1,6 +1,16 @@
 # Ex Libris Touchnet Connector
 This connector enables libraries from universities that use [Touchnet](https://www.touchnet.com/en) payment services to accept payment of fines and fees. The university can set up a link to the connector in the discovery system. When the patron clicks on the "Pay Fines" link, the conenctor will set up the payment and direct the patron to Touchnet to pay. Successfully completed payments are posted to the patron's account in Alma.
 
+## Overview
+This connector performs the following tasks:
+* Set up the payment in Touchnet and redirect to the Touchnet site for payment
+* Receive the response from Touchnet and post the paynent to Alma
+* Redirect the user back to Primo
+
+![EXL Touchnet Connector Flow](https://i.postimg.cc/R04xpMGJ/exl-touchnet-flow.png)
+
+*No PCI* information is handled by the connector. All of the payment information is entered only in the Touchnet site.
+
 ## Configuring the Connector
 In order to use the connector, you need to coordinate with Touchnet customer service. They will provide the following two pieces of information:
 * uPay Site ID, stored in the `UPAY_SITE_ID` environment variable
