@@ -10,19 +10,27 @@ const select     = xpath.useNamespaces(
 )
 
 class TouchnetWS {
-  constructor(uri) {
-    requestp({
-      url: "http://eu-st01.ext.exlibrisgroup.com/delivery/touchnet/settings.json", 
-      json:true
-    })
-    .then( data => {
-      this.uri = uri || data.TOUCHNET_WS_URL;
-      this.auth = data.TOUCHNET_WS_AUTH; 
-    })
-    .catch( err => { 
+  constructor() { }
+
+  static async init(uri) {
+    const o = new TouchnetWS();
+    await o._init(uri);
+    return o;
+  }
+
+  async _init(uri) {
+    let data;
+    try {
+      data = await requestp({
+        url: "http://eu-st01.ext.exlibrisgroup.com/delivery/touchnet/settings.json", 
+        json:true
+      });
+    } catch(e) {
       console.error('Error creating TouchetWS client', err); 
       process.exit(1) 
-    })
+    }
+    this.uri = uri || data.TOUCHNET_WS_URL;
+    this.auth = data.TOUCHNET_WS_AUTH; 
   }
 
   async generateTicket(user_id, options ) {

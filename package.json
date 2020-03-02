@@ -4,8 +4,9 @@
   "description": "Connector between Ex Libris Alma and Primo and the Touchnet payment system",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node primo.js & nodemon index.js"
+    "start": "node app/index.js",
+    "dev": "node test/primo.js & nodemon app/index.js",
+    "lambdadev": "TARGET_PORT=3000 node test/primo.js & sam local start-api --env-vars test/env.json "
   },
   "author": "Josh Weisman",
   "license": "MIT",

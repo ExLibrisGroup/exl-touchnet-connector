@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Ex Libris Touchnet Connetor
+
+Globals:
+  Function:
+    Timeout: 10
+
+Parameters:
+  AlmaApiKey:
+    Type: String
+    Description: Alma API Key. Obtain at https://developers.exlibrisgroup.com/alma/apis
+  UpaySiteId:
+    Type: String
+    Description: uPay Site ID. Obtain from Touchnet customer service.
+  UpaySiteUrl:
+    Type: String
+    Description: uPay Site URL. Obtain from Touchnet customer service.
+
+Resources:
+  ConnectorFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: ./
+      Handler: app/lambda.handler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          ALMA_APIKEY: !Sub "${AlmaApiKey}"
+          UPAY_SITE_ID: !Sub "${UpaySiteId}"
+          UPAY_SITE_URL: !Sub "${UpaySiteUrl}"
+      Events:
+        Connector:
+          Type: Api
+          Properties:
+            Path: /touchnet
+            Method: get
+        ConnectorSuccess:
+          Type: Api
+          Properties:
+            Path: /touchnet/success
+            Method: post 
+        ConnectorError:
+          Type: Api
+          Properties:
+            Path: /touchnet/error
+            Method: get
+
+Outputs:
+  TouchnetConnectorApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/touchnet/"
+  TouchnetConnectorFunction:
+    Description: "Touchnet Connector Function ARN"
+    Value: !GetAtt ConnectorFunction.Arn
+  TouchnetConnectorFunctionIamRole:
+    Description: "Implicit IAM Role created for Touchnet Connector function"
+    Value: !GetAtt ConnectorFunctionRole.Arn

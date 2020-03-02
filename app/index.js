@@ -2,11 +2,14 @@ const express = require('express');
 const jwt     = require('jsonwebtoken');
 const alma    = require('almarestapi-lib');
 const nconf   = require('nconf');
-const TouchnetWS = require('./touchnet.js');
+const TouchnetWS = require('./touchnet');
+const responses = require('./responses');
+const { frombase64 } = require('./utils');
 
 nconf.env().file('config', './config.json');
 
-const touchnet = new TouchnetWS(nconf.get('TOUCHNET_WS_URL'));
+let touchnet;
+TouchnetWS.init(nconf.get('TOUCHNET_WS_URL')).then(t=>touchnet=t);
 
 const PORT = process.env.PORT || 3002;
 const app = express();
@@ -29,6 +32,7 @@ app.get('/touchnet', async (request, response) => {
     /* From Primo */
     try {
       user_id = jwt.decode(request.query.jwt).userName;
+      user_id = 'exl_impl';
       ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
       console.error("Error in receiving user information:", e.message)
@@ -47,7 +51,7 @@ app.get('/touchnet', async (request, response) => {
       referrer: referrer,
       post_message: post_message
     });
-    response.send(redirectForm(ticket, user_id, upay_site_id, upay_site_url))
+    response.send(responses.redirectForm(ticket, user_id, upay_site_id, upay_site_url))
   } catch (e) {
     console.error("Error in setting up payment:", e.message)
     return response.status(400).send('Cannot prepare payment information.');
@@ -67,10 +71,10 @@ app.post('/touchnet/success', async (request, response) => {
 
   try {
     if (post_message) {
-      response.send(returnToReferrer(referrer, { amount: amount, external_transaction_id: receipt, user_id: user_id }));
+      response.send(responses.returnToReferrer(referrer, { amount: amount, external_transaction_id: receipt, user_id: user_id }));
     } else {    
       await alma.postp(`/users/${user_id}/fees/all?op=pay&amount=${amount}&method=ONLINE&external_transaction_id=${receipt}`, null);
-      response.send(returnToReferrer(referrer));
+      response.send(responses.returnToReferrer(referrer));
     }
   } catch (e) {
     console.error("Error in posting payment to Alma:", e.message);
@@ -83,42 +87,3 @@ app.get('/touchnet/error', (request, response) => {
 })
 
 app.listen(PORT);
-
-function redirectForm(ticket, user_id, upay_site_id, upay_site_url) {
-  return `
-    <form method="post" action="${upay_site_url || nconf.get('UPAY_SITE_URL')}" name="touchnet">
-      <input type="hidden" name="UPAY_SITE_ID" value="${upay_site_id || nconf.get('UPAY_SITE_ID')}">
-      <input type="hidden" name="TICKET" value="${ticket}">
-      <input type="hidden" name="TICKET_NAME" value="${user_id}">
-    </form>
-    Redirecting to payment site.
-    <script>
-    window.onload = function(){
-      document.forms['touchnet'].submit();
-    }
-    </script>
-  `
-}
-
-function returnToReferrer(referrer, message) {
-  let form = '<p>Payment successfully processed.</p>';
-  if (message) {
-    form += `
-    <p>Returning...</p>
-    <script>
-      window.opener.postMessage(${JSON.stringify(message)}, "${referrer ? referrer : "*"}");
-      window.close();
-    </script>
-    `    
-  } else if (referrer) {
-    form += `
-      <p>Redirecting...</p>
-      <script>
-        setInterval(() => { window.location.href = "${referrer}"; }, 2000);
-      </script>
-    `
-  }
-  return form;
-}
-
-const frombase64 = ( str ) => Buffer.from(str, 'base64').toString();
