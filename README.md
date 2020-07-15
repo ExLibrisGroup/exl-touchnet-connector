@@ -16,6 +16,8 @@ In order to use the connector, you need to coordinate with Touchnet customer ser
 * uPay Site ID, stored in the `UPAY_SITE_ID` environment variable
 * uPay Site URL, stored in the `UPAY_SITE_URL` environment variable
 
+The production Touchnet Web Service URL is hardcoded in the service. If you wish to test against a different WS URL, you can set the `TOUCHNET_WS_URL` environment variable.
+
 In addition, you'll need an API key for Alma. Instructions for obtaining an API key are available at the [Ex Libris Developer Network](https://developers.exlibrisgroup.com/alma/apis). The API key should include read/write permissions for "users". The API key is stored in the `ALMA_APIKEY` environment variable.
 
 ### Deploying to Heroku
