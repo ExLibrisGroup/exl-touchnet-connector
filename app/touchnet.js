@@ -1,6 +1,6 @@
-const request    = require('request');
 const xpath      = require('xpath');
 const dom        = require('xmldom').DOMParser;
+const { requestp } = require('./utils');
 
 const select     = xpath.useNamespaces(
   {
@@ -118,17 +118,4 @@ const getSingleNode = (path, doc) => {
   const document = typeof doc === 'string' ? new dom().parseFromString(doc) : doc;
   const node = select(path, document);
   return node.length > 0 ? node[0].firstChild.data : null;
-}
-
-const requestp = ( options ) => {
-  if (typeof options === 'string') {
-    options = {url: options}
-  } 
-  return new Promise(function (resolve, reject) {
-    request(options, function(err, response, body) {
-      if (err) reject(err);
-      else if (/^[45]/.test(response.statusCode)) reject(new Error(response.statusMessage));
-      else resolve(body);
-    });
-  });  
 }

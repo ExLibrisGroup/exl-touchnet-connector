@@ -16,7 +16,9 @@ Parameters:
   UpaySiteUrl:
     Type: String
     Description: uPay Site URL. Obtain from Touchnet customer service.
-
+  TouchnetWsUrl:
+    Type: String
+    Description: Optional. Overrides the default Touchnet webservice URL.
 Resources:
   ConnectorFunction:
     Type: AWS::Serverless::Function 
@@ -29,6 +31,7 @@ Resources:
           ALMA_APIKEY: !Sub "${AlmaApiKey}"
           UPAY_SITE_ID: !Sub "${UpaySiteId}"
           UPAY_SITE_URL: !Sub "${UpaySiteUrl}"
+          TOUCHNET_WS_URL: !Sub "${TouchnetWsUrl}"
       Events:
         Connector:
           Type: Api

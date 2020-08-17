@@ -32,7 +32,11 @@ Another option for deploying the connector is to use Amazon Web Services (AWS). 
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
 1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section.
 
-## Configuration in Primo
-To add the "Pay Fines" link to Primo, follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/020Primo_VE/Library_Card_Configuration/Configuring_the_Pay_Fine_Link_for_Primo_VE). Be sure to include a `?` at the end of the URL. For example, if your Heroku URL is `https://exl-touchnet-connector-myuni.herokuapps.com`, configure the following in Primo: `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?`.
+## Configuration in Primo VE
+To add the "Pay Fines" link to Primo VE, follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/020Primo_VE/Library_Card_Configuration/Configuring_the_Pay_Fine_Link_for_Primo_VE). Be sure to include a `?` at the end of the URL. For example, if your connector URL is `https://exl-touchnet-connector-myuni.herokuapps.com`, configure the following in Primo: `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?`.
 
 ![Primo](https://i.postimg.cc/CK7TWW6P/exl-touchnet-primo.png)
+
+## Configuration in Primo Classic (new UI)
+To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link). You should include the *Primo institution code* (not the Alma code) in the URL as follows:
+`https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?institution=<<INSTITUTION_CODE>>&pds_handle={{pds_handle}}`.
