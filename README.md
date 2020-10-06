@@ -28,7 +28,7 @@ One easy way to deploy the connector is to use the [Heroku platform](https://her
 ### Deploying to AWS
 Another option for deploying the connector is to use Amazon Web Services (AWS). AWS has starter and free tiers which make hosting the connector nearly free. To deploy to AWS, log into your account (or create a new one). Then follow the instructions below.
 
-1. Click on [this link](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://almad-test.s3.amazonaws.com/scratch/exl-touchnet-connector/template.yaml&stackName=ExlTouchnetConnector) to open the AWS console.
+1. Click on [this link](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://almadtest.s3.amazonaws.com/sam/cloudformation.packaged.yaml&stackName=ExlTouchnetConnector) to open the AWS console.
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
 1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section.
 

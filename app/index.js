@@ -36,20 +36,22 @@ app.get('/touchnet', async (request, response) => {
       user_id = jwt.decode(request.query.jwt).userName;
       ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
-      console.error("Error in receiving user information:", e.message)
-      return response.status(400).send('Cannot receive user details information.');
+      console.error("Error in retrieving user information:", e.message)
+      return response.status(400).send('Cannot retrieve user details information.');
     }
   } else if (request.query.pds_handle) {
     /* From Primo Classic */
     try {
       const ref = new URL(referrer);
-      const url = `${ref.protocol}//${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${request.query.institute}&pds_handle=${request.query.pds_handle}`;
+      const url = `${ref.protocol}//${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${request.query.institution}&pds_handle=${request.query.pds_handle}`;
+      console.log('retrieving borinfo from', url);
       const borinfo = await requestp({url});
       const node = require('xpath').select('/bor/bor_id/id', new dom().parseFromString(borinfo));
       user_id = node.length > 0 ? node[0].firstChild.data : null;
+      ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
-      console.error("Error in receiving user information:", e.message)
-      return response.status(400).send('Cannot receive user details information.');
+      console.error("Error in retrieving user information:", e.message)
+      return response.status(400).send('Cannot retrieve user details information.');
     }
   }
 

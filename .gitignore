@@ -2,3 +2,6 @@ config.json
 node_modules/
 env.json
 .aws-sam/
+.npmrc
+*.packaged.yaml
+.test/
