@@ -26,7 +26,7 @@ class TouchnetWS {
         json:true
       });
     } catch(e) {
-      console.error('Error creating TouchetWS client', err); 
+      console.error('Error creating TouchetWS client', e); 
       process.exit(1) 
     }
     this.uri = uri || data.TOUCHNET_WS_URL;
@@ -74,7 +74,7 @@ const generateTicketBody = (ticketName, options) => {
       <typ:ticketName>${ticketName}</typ:ticketName>
       <typ:nameValuePairs>
           <typ:name>AMT</typ:name>
-          <typ:value>${options.amount}</typ:value>
+          <typ:value>${options.amount.toFixed(2)}</typ:value>
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>SUCCESS_LINK</typ:name>
