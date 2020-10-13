@@ -32,6 +32,14 @@ Another option for deploying the connector is to use Amazon Web Services (AWS). 
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
 1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section.
 
+### Deploying with Docker
+On a machine with Docker installed, you can run the following:
+```
+docker run --rm -p 3002:3002 --env-file <<ENV FILE>> -d exlibrisgroup/exl-touchnet-connector
+```
+
+Be sure to include the [configuration parameters](#configuring-the-connector) in the environment file.
+
 ## Configuration in Primo VE
 To add the "Pay Fines" link to Primo VE, follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/020Primo_VE/Library_Card_Configuration/Configuring_the_Pay_Fine_Link_for_Primo_VE). Be sure to include a `?` at the end of the URL. For example, if your connector URL is `https://exl-touchnet-connector-myuni.herokuapps.com`, configure the following in Primo: `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?`.
 
