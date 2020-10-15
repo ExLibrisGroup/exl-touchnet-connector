@@ -7,13 +7,24 @@ const responses = require('./responses');
 const dom = require('xmldom').DOMParser;
 const { requestp } = require('./utils');
 const { frombase64 } = require('./utils');
+const fs = require('fs');
 
 nconf.env().file('config', './config.json');
+
+const http = require('http');
+const https = require('https');
+let privateKey, certificate, credentials;
+if (process.env.CERTIFICATE_KEY_FILE) {
+  privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
+  certificate = fs.readFileSync(process.env.CERTIFICATE_CRT_FILE, 'utf8');
+  credentials = {key: privateKey, cert: certificate};
+}
 
 let touchnet;
 TouchnetWS.init(nconf.get('TOUCHNET_WS_URL')).then(t=>touchnet=t);
 
 const PORT = process.env.PORT || 3002;
+const SECURE_PORT = process.env.SECURE_PORT || 3003;
 const app = express();
 app.use(express.urlencoded({extended: true}));
 
@@ -22,7 +33,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/touchnet', async (request, response) => {
-  const url = request.protocol + '://' + request.get('host') + request.originalUrl.split("?").shift();
+  const returnUrl = (request.protocol + '://' + request.get('host') + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
   const referrer = request.header('Referer');
 
   let user_id, total_sum, upay_site_id, upay_site_url, post_message = '';
@@ -60,8 +71,8 @@ app.get('/touchnet', async (request, response) => {
   try {
     let ticket = await touchnet.generateTicket(user_id, {
       amount: total_sum,
-      success: url + '/success',
-      error: url + '/error',
+      success: returnUrl + '/success',
+      error: returnUrl + '/error',
       cancel: referrer,
       referrer: referrer,
       post_message: post_message
@@ -89,6 +100,7 @@ app.post('/touchnet/success', async (request, response) => {
       response.send(responses.returnToReferrer(referrer, { amount: amount, external_transaction_id: receipt, user_id: user_id }));
     } else {    
       await alma.postp(`/users/${user_id}/fees/all?op=pay&amount=${amount}&method=ONLINE&external_transaction_id=${receipt}`, null);
+      console.log('Payment posted to Alma. Returning to referrer', referrer);
       response.send(responses.returnToReferrer(referrer));
     }
   } catch (e) {
@@ -101,4 +113,6 @@ app.get('/touchnet/error', (request, response) => {
   response.status(400).send('An error has occurred');
 })
 
-app.listen(PORT);
+// app.listen(PORT);
+http.createServer(app).listen(PORT);
+if (credentials) https.createServer(credentials, app).listen(SECURE_PORT);

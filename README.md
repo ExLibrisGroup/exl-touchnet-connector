@@ -16,9 +16,16 @@ In order to use the connector, you need to coordinate with Touchnet customer ser
 * uPay Site ID, stored in the `UPAY_SITE_ID` environment variable
 * uPay Site URL, stored in the `UPAY_SITE_URL` environment variable
 
-The production Touchnet Web Service URL is hardcoded in the service. If you wish to test against a different WS URL, you can set the `TOUCHNET_WS_URL` environment variable.
+The production Touchnet Web Service URL is hardcoded in the service. If you're testing the connector in the Touchnet test environment, set the `TOUCHNET_WS_URL` environment variable to the value provided by Touchnet.
 
 In addition, you'll need an API key for Alma. Instructions for obtaining an API key are available at the [Ex Libris Developer Network](https://developers.exlibrisgroup.com/alma/apis). The API key should include read/write permissions for "users". The API key is stored in the `ALMA_APIKEY` environment variable.
+
+## Deploying the Connector
+
+## Local Deployment
+To run the connetor locally, set the environment variables and run `npm start`.
+
+To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
 
 ### Deploying to Heroku
 One easy way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has free plans (which could be appropriate depending on the level of usage) or very reasonable "hobby" plans. To deploy to Heroku, gather the parameters specified above and then click on the link below to sign up and deploy the connector. At the end of the process, Heroku will provide the URL for your connector. Use it to configure Primo in the following section.
@@ -40,11 +47,13 @@ docker run --rm -p 3002:3002 --env-file <<ENV FILE>> -d exlibrisgroup/exl-touchn
 
 Be sure to include the [configuration parameters](#configuring-the-connector) in the environment file.
 
-## Configuration in Primo VE
+## Configuring Primo
+
+### Configuration in Primo VE
 To add the "Pay Fines" link to Primo VE, follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/020Primo_VE/Library_Card_Configuration/Configuring_the_Pay_Fine_Link_for_Primo_VE). Be sure to include a `?` at the end of the URL. For example, if your connector URL is `https://exl-touchnet-connector-myuni.herokuapps.com`, configure the following in Primo: `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?`.
 
 ![Primo](https://i.postimg.cc/CK7TWW6P/exl-touchnet-primo.png)
 
-## Configuration in Primo Classic (new UI)
+### Configuration in Primo Classic (new UI)
 To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link). You should include the *Primo institution code* (not the Alma code) in the URL as follows:
 `https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?institution=<<INSTITUTION_CODE>>&pds_handle={{pds_handle}}`.

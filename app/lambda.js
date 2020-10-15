@@ -27,7 +27,7 @@ exports.handler = async (event, context) => {
 };
 
 const connector = async (event) => {
-  const url = `${event.headers['x-forwarded-proto']}://${event.headers.host}${event.requestContext.http.path}`;
+  const returnUrl = `${event.headers['x-forwarded-proto']}://${event.headers.host}${event.requestContext.http.path}`.replace(/\/$/, "");
   const referrer = event.headers['referer'];
   const queryStringParameters = event.queryStringParameters;
 
@@ -68,8 +68,8 @@ const connector = async (event) => {
   try {
     let ticket = await touchnet.generateTicket(user_id, {
       amount: total_sum,
-      success: url + '/success',
-      error: url + '/error',
+      success: returnUrl + '/success',
+      error: returnUrl + '/error',
       cancel: referrer,
       referrer: referrer,
       post_message: post_message
@@ -107,6 +107,7 @@ const success = async (event) => {
       }
     } else {    
       await alma.postp(`/users/${user_id}/fees/all?op=pay&amount=${pmt_amt}&method=ONLINE&external_transaction_id=${receipt}`, null);
+      console.log('Payment posted to Alma. Returning to referrer', referrer);
       return { 
         statusCode: 200, 
         headers: { 'Content-type': 'text/html' },
