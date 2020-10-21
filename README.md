@@ -39,6 +39,8 @@ Another option for deploying the connector is to use Amazon Web Services (AWS). 
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
 1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section.
 
+For a walkthrough of the installation and configuration process on AWS, see [this video](https://youtu.be/ze_VuEoGvdE).
+
 ### Deploying with Docker
 On a machine with Docker installed, you can run the following:
 ```
