@@ -86,11 +86,11 @@ const generateTicketBody = (ticketName, options) => {
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>CANCEL_LINK</typ:name>
-          <typ:value>${options.cancel}</typ:value>
+          <typ:value>${encodeURIComponent(cacheBust(options.cancel))}</typ:value>
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>REFERRER</typ:name>
-          <typ:value>${options.referrer}</typ:value>
+          <typ:value>${encodeURIComponent(cacheBust(options.referrer))}</typ:value>
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>POST_MESSAGE</typ:name>
@@ -118,4 +118,9 @@ const getSingleNode = (path, doc) => {
   const document = typeof doc === 'string' ? new dom().parseFromString(doc) : doc;
   const node = select(path, document);
   return node.length > 0 ? node[0].firstChild.data : null;
+}
+
+const cacheBust = uri => {
+  let param = uri.indexOf('?') == -1 ? '?' : '';
+  return uri + param + '&rand=' + Math.floor(Math.random() * Math.floor(1000000));
 }

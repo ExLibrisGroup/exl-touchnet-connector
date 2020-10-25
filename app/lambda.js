@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
 
 const connector = async (event) => {
   const returnUrl = `${event.headers['x-forwarded-proto']}://${event.headers.host}${event.requestContext.http.path}`.replace(/\/$/, "");
-  const referrer = event.headers['referer'];
+  const referrer = event.queryStringParameters.returnUrl || event.headers['referer'];
 
   try {
     const resp = await get(event.queryStringParameters, returnUrl, referrer);

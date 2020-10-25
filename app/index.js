@@ -40,7 +40,7 @@ app.get('/', (request, response) => {
 
 app.get('/touchnet', async (request, response) => {
   const returnUrl = (request.protocol + '://' + request.get('host') + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
-  const referrer = request.header('Referer');
+  const referrer = request.query.returnUrl || request.header('Referer');
 
   try {
     const resp = await get(request.query, returnUrl, referrer);
@@ -116,6 +116,7 @@ const success = async body => {
   let receipt, user_id, referrer, post_message;
   try {
     ({ receipt, user_id, referrer, post_message } = await touchnet.authorize(body.session_identifier));
+    referrer = decodeURIComponent(referrer);
   } catch(e) {
     console.error("Error while authorizing payment:", e.message);
     throw new Error('Could not authorize payment.')
