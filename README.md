@@ -33,7 +33,7 @@ One easy way to deploy the connector is to use the [Heroku platform](https://her
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### Deploying to AWS
-Another option for deploying the connector is to use Amazon Web Services (AWS). AWS has starter and free tiers which make hosting the connector nearly free. To deploy to AWS, log into your account (or create a new one). Then follow the instructions below.
+Another option for deploying the connector is to use Amazon Web Services (AWS). AWS has starter and free tiers which make hosting the connector nearly free. To deploy to AWS, log into your account (or create a new one). Then follow the instructions below. (_Note:_ the connector template is currently available in the us-east-1 AWS region. Be sure your console is set to use that region. If you would like to install the connector in another region, please open an [issue](https://github.com/ExLibrisGroup/exl-touchnet-connector/issues).)
 
 1. Click on [this link](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://almadtest.s3.amazonaws.com/sam/exl-touchnet-connector/cloudformation.packaged.yaml&stackName=ExlTouchnetConnector) to open the AWS console.
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
