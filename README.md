@@ -57,8 +57,10 @@ To add the "Pay Fines" link to Primo VE, follow the instructions in this [online
 ![Primo](https://i.postimg.cc/CK7TWW6P/exl-touchnet-primo.png)
 
 ### Configuration in Primo Classic (new UI)
-To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link). You should include the *Primo institution code* (not the Alma code) in the URL as follows:
-`https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?institution=<<INSTITUTION_CODE>>&pds_handle={{pds_handle}}`.
+To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link) to declare a Pay Fine Link. For the Link URL, specify the URL of the connector, and add the `pds_handle` query striong parameter and the *Primo institution code* (not the Alma code) in the URL. For example:
+```
+https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?institution=<<INSTITUTION_CODE>>&pds_handle={{pds_handle}}
+```
 
 ### Return URL
 The Connector will attempt to determine the correct return URL automatically. However, if you prefer to specify the return URL explicitly, you can use the `returnUrl` parameter when configuring your payment link. (Note that any querystring parameters should be escaped).
