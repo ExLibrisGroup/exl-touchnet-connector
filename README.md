@@ -37,7 +37,7 @@ Another option for deploying the connector is to use Amazon Web Services (AWS). 
 
 1. Click on [this link](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://almadtest.s3.amazonaws.com/sam/exl-touchnet-connector/cloudformation.packaged.yaml&stackName=ExlTouchnetConnector) to open the AWS console.
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
-1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section.
+1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section. The public IP address will also appear in the *Outputs* tab. This IP may be given to Touchnet to enable access to the Touchnet API.
 
 For a walkthrough of the installation and configuration process on AWS, see [this video](https://youtu.be/9TJiIljRTro).
 

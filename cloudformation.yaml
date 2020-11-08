@@ -17,6 +17,11 @@
       Description: Optional. Overrides the default Touchnet webservice URL.
       Default: ''
   Resources:
+    # https://gist.github.com/jweisman/e7960060022b9b9af18b81c9366f3b45
+    'Fn::Transform':
+      Name: 'AWS::Include'
+      Parameters:
+        Location: s3://almadtest/sam/LambdaPublicIP.yaml
     ProxyAPI:
       Type: AWS::Serverless::HttpApi
       Properties:
@@ -64,6 +69,16 @@
               - logs:CreateLogStream
               - logs:PutLogEvents
               Resource: arn:aws:logs:*:*:*
+        - PolicyName: ec2vpcaccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - ec2:CreateNetworkInterface
+              - ec2:DescribeNetworkInterfaces
+              - ec2:DeleteNetworkInterface
+              Resource: "*"          
     LambdaApiGatewayExecutionPermission:
       Type: AWS::Lambda::Permission
       Properties:
@@ -90,6 +105,12 @@
         Role: !GetAtt LambdaExecutionRole.Arn
         Runtime: nodejs12.x
         Timeout: 60
+        VpcConfig:
+          SecurityGroupIds:
+            - !GetAtt pubPrivateVPC.DefaultSecurityGroup
+          SubnetIds:
+            - !Ref privateSubnet1
+            - !Ref privateSubnet2
         Environment:
           Variables:
             ALMA_APIKEY: !Ref AlmaApiKey
@@ -106,4 +127,11 @@
           - ".execute-api."
           - !Ref AWS::Region
           - ".amazonaws.com/"
+      Export: 
+        Name: !Join ["-", [!Ref "AWS::StackName","api-url"]]          
+    PublicIP:
+      Description: Public IP for NAT Gateway
+      Value: !Ref natPublicIP
+      Export: 
+        Name: !Join ["-", [!Ref "AWS::StackName","eip"]]
   

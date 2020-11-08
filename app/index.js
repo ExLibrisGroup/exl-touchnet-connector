@@ -5,8 +5,7 @@ const nconf   = require('nconf');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
 const dom = require('xmldom').DOMParser;
-const { requestp } = require('./utils');
-const { frombase64 } = require('./utils');
+const { requestp, frombase64 } = require('./utils');
 const fs = require('fs');
 
 /* global URL */
