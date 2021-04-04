@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",
-    "dev": "node test/primo.js & nodemon app/index.js",
+    "dev": "node .test/primo.js & nodemon -r dotenv/config app/index.js",
     "lambdadev": "TARGET_PORT=3000 node test/primo.js & sam local start-api --env-vars test/env.json "
   },
   "author": "Josh Weisman",
@@ -14,16 +14,16 @@
     "almarestapi-lib": "^1.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "nconf": "^0.10.0",
     "request": "^2.88.0",
     "xmldom": "^0.1.27",
     "xpath": "0.0.27"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "dotenv": "^8.2.0"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/ExLibrisGroup/exl-touchnet-connector"
+    "type": "git",
+    "url": "https://github.com/ExLibrisGroup/exl-touchnet-connector"
   }
 }

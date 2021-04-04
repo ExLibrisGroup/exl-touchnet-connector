@@ -1,10 +1,7 @@
-const nconf   = require('nconf');
-nconf.env().file('config', './config.json');
-
 const redirectForm = (ticket, user_id, upay_site_id, upay_site_url) => {
   return `
-    <form method="post" action="${upay_site_url || nconf.get('UPAY_SITE_URL')}" name="touchnet">
-      <input type="hidden" name="UPAY_SITE_ID" value="${upay_site_id || nconf.get('UPAY_SITE_ID')}">
+    <form method="post" action="${upay_site_url || process.env.UPAY_SITE_URL}" name="touchnet">
+      <input type="hidden" name="UPAY_SITE_ID" value="${upay_site_id || process.env.UPAY_SITE_ID}">
       <input type="hidden" name="TICKET" value="${ticket}">
       <input type="hidden" name="TICKET_NAME" value="${user_id}">
     </form>

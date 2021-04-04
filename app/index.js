@@ -1,15 +1,11 @@
 const express = require('express');
 const jwt     = require('jsonwebtoken');
 const alma    = require('almarestapi-lib');
-const nconf   = require('nconf');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
 const dom = require('xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const fs = require('fs');
-
-/* global URL */
-nconf.env().file('config', './config.json');
 
 const http = require('http');
 const https = require('https');
@@ -24,7 +20,7 @@ let touchnet;
 const init = async () => {
   if (!touchnet) {
     console.log('Initializing Touchnet');
-    touchnet = await TouchnetWS.init(nconf.get('TOUCHNET_WS_URL'));
+    touchnet = await TouchnetWS.init(process.env.TOUCHNET_WS_URL);
   }
 }
 

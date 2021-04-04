@@ -5,3 +5,4 @@ env.json
 .npmrc
 *.packaged.yaml
 .test/
+.env
