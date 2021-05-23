@@ -23,7 +23,7 @@ In addition, you'll need an API key for Alma. Instructions for obtaining an API 
 ## Deploying the Connector
 
 ## Local Deployment
-To run the connetor locally, set the environment variables and run `npm start`.
+To run the connector locally, set the environment variables and run `npm start`.
 
 To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
 
@@ -69,7 +69,7 @@ For example, to specify the Fines and Fees screen of the account section in Prim
 
 So my full Payment Link would be as follows:
 ```
-https://https://********.execute-api.us-east-1.amazonaws.com/touchnet?returnUrl=https://MY-INST.alma.exlibrisgroup.com/discovery/account%3Fvid=MY_INST:MY_VIEW%26section=fines%26lang=en
+https://********.execute-api.us-east-1.amazonaws.com/touchnet?returnUrl=https://MY-INST.alma.exlibrisgroup.com/discovery/account%3Fvid=MY_INST:MY_VIEW%26section=fines%26lang=en
 ```
 
 Notice the escaped `?` and `&` signs.
