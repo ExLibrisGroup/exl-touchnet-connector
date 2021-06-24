@@ -20,7 +20,7 @@ const returnToReferrer = (referrer, message) => {
     form += `
     <p>Returning...</p>
     <script>
-      window.opener.postMessage(${JSON.stringify(message)}, "${referrer ? referrer : "*"}");
+      window.opener.postMessage(${JSON.stringify(message)}, "*");
       window.close();
     </script>
     `    
