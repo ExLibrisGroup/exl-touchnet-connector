@@ -34,7 +34,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/touchnet', async (request, response) => {
-  const returnUrl = (request.protocol + '://' + request.get('host') + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
+  const protocol = request.get('x-forwarded-proto') || request.protocol;
+  const host = request.get('x-forwarded-host') || request.get('host');
+  const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
   const referrer = request.query.returnUrl || request.header('Referer');
 
   try {
