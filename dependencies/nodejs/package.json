@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "almarestapi-lib": "^1.1.0",
+    "almarestapi-lib": "^1.1.4",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "nconf": "^0.10.0",
     "request": "^2.88.0",
-    "xmldom": "^0.1.27",
+    "xmldom": "^0.6.0",
     "xpath": "0.0.27"
   }
 }

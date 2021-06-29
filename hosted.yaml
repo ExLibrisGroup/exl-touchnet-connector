@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Ex Libris Touchnet Hosted Connector
+  
+Globals:
+  Function:
+    Timeout: 30
+Parameters:
+  ConfigSecretName:
+    Type: String
+    Default: TouchnetConnectorSecrets
+
+Resources:
+  # https://gist.github.com/jweisman/e7960060022b9b9af18b81c9366f3b45
+  'Fn::Transform':
+    Name: 'AWS::Include'
+    Parameters:
+      Location: s3://almadtest/sam/LambdaPublicIP.yaml
+  TouchnetConnectorApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Auth:
+        Authorizers:
+          JWTAuthorizer:
+            IdentitySource: '$request.header.Authorization'
+            JwtConfiguration: 
+              audience: 
+              - ExlCloudApp:!~exlibrisgroup/alma-touchnet-cloudapp
+              - ExlCloudApp:exlibrisgroup/alma-touchnet-cloudapp
+              issuer: https://apps01.ext.exlibrisgroup.com/auth
+            Name: JwtAuthorizer 
+        # Uncomment this line to use the JWT authorizer for all routes
+        #DefaultAuthorizer: JWTAuthorizer  
+      CorsConfiguration:
+        AllowOrigins:
+          - "https://apps01.ext.exlibrisgroup.com"
+          - "http://localhost:4200"
+        AllowHeaders: [authorization, content-type]
+        AllowMethods: [GET, PUT, OPTIONS, DELETE]
+        AllowCredentials: True
+        MaxAge: 600
+  TouchnetConnectorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: hosted/hosted.handler
+      Layers:
+        - !Ref TouchnetConnectorDependencies
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          CONFIG_SECRET: !Ref ConfigSecretName
+      FunctionName: !Sub "${AWS::StackName}-Service"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt pubPrivateVPC.DefaultSecurityGroup
+        SubnetIds:
+          - !Ref privateSubnet1
+          - !Ref privateSubnet2      
+      Events:
+        Options: 
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref TouchnetConnectorApi
+            Path: /{proxy+}
+            Method: options
+        GetConfig:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref TouchnetConnectorApi
+            Path: /config
+            Method: get
+            Auth: 
+              Authorizer: JWTAuthorizer
+        SetConfig:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref TouchnetConnectorApi
+            Path: /config
+            Method: put
+            Auth: 
+              Authorizer: JWTAuthorizer
+        DeleteConfig: 
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref TouchnetConnectorApi
+            Path: /config
+            Method: delete
+            Auth: 
+              Authorizer: JWTAuthorizer
+        Connector:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref TouchnetConnectorApi
+            Path: /{proxy+}
+            Method: any
+  TouchnetConnectorDependencies:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub "${AWS::StackName}-Dependencies"
+      Description: Dependencies for Touchnet Connector
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: 'MIT'
+      RetentionPolicy: Retain
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: logs
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+      - PolicyName: secrets
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - secretsmanager:GetSecretValue
+            - secretsmanager:PutSecretValue
+            Resource: !Ref ConfigSecret
+      - PolicyName: ec2vpcaccess
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - ec2:CreateNetworkInterface
+            - ec2:DescribeNetworkInterfaces
+            - ec2:DeleteNetworkInterface
+            Resource: "*" 
+  ConfigSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: !Ref ConfigSecretName
+      SecretString: '{}'
+  ApiMapping:
+    Type: 'AWS::ApiGatewayV2::ApiMapping'
+    Properties:
+      DomainName: api.exldevnetwork.net
+      ApiMappingKey: tn
+      ApiId: !Ref TouchnetConnectorApi
+      Stage: $default
+
+Outputs:
+  TouchnetConnectorApi:
+    Description: "Endpoint URL"
+    Value: !Sub "https://${TouchnetConnectorApi}.execute-api.${AWS::Region}.amazonaws.com/pinyin/"
+  PublicIP:
+    Description: Public IP for NAT Gateway
+    Value: !Ref natPublicIP
+    Export: 
+      Name: !Join ["-", [!Ref "AWS::StackName","eip"]]

@@ -78,7 +78,7 @@ const generateTicketBody = (ticketName, options) => {
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>SUCCESS_LINK</typ:name>
-          <typ:value>${options.success}</typ:value>
+          <typ:value>${options.success}?institution=${options.institution}</typ:value>
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>ERROR_LINK</typ:name>
