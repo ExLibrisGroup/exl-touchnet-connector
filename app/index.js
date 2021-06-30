@@ -17,10 +17,10 @@ if (process.env.CERTIFICATE_KEY_FILE) {
 }
 
 let touchnet;
-const init = async () => {
+const init = async (touchnet_ws_url) => {
   if (!touchnet) {
     console.log('Initializing Touchnet');
-    touchnet = await TouchnetWS.init(process.env.TOUCHNET_WS_URL);
+    touchnet = await TouchnetWS.init(touchnet_ws_url || process.env.TOUCHNET_WS_URL);
   }
 }
 
@@ -42,22 +42,22 @@ app.get('/touchnet', async (request, response) => {
   try {
     const resp = await get(request.query, returnUrl, referrer);
     response.send(resp);
-  } catch(e) {
+  } catch (e) {
     return response.status(400).send(e.message);
   }
 })
 
 const get = async (qs, returnUrl, referrer) => {
-  await init();
-  let user_id, total_sum, upay_site_id, upay_site_url, post_message = 'false';
+  if (!qs || !returnUrl) return 'Touchnet connector';
+  let user_id, total_sum, upay_site_id, upay_site_url, post_message = 'false', institution, touchnet_ws_url;
   if (qs.s) { 
     /* From CloudApp */
-    ({ user_id, total_sum, upay_site_id, upay_site_url } = JSON.parse(frombase64(qs.s)));
+    ({ user_id, total_sum, upay_site_id, upay_site_url, touchnet_ws_url } = JSON.parse(frombase64(qs.s)));
     post_message = 'true';
   } else if (qs.jwt) { 
     /* From Primo VE */
     try {
-      user_id = jwt.decode(qs.jwt).userName;
+      ({ userName: user_id, institution } = jwt.decode(qs.jwt));
       ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
       console.error("Error in retrieving user information:", e.message)
@@ -81,14 +81,16 @@ const get = async (qs, returnUrl, referrer) => {
 
   if (!user_id || total_sum <= 0) throw new Error('Nothing to pay');
 
+  await init(touchnet_ws_url);
   try {
     let ticket = await touchnet.generateTicket(user_id, {
       amount: total_sum,
       success: returnUrl + '/success',
       error: returnUrl + '/error',
       cancel: referrer,
-      referrer: referrer,
-      post_message: post_message
+      referrer,
+      post_message,
+      institution
     });
     console.log('Successfully created ticket', ticket);
     return responses.redirectForm(ticket, user_id, upay_site_id, upay_site_url);

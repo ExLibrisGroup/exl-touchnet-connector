@@ -22,10 +22,18 @@ In addition, you'll need an API key for Alma. Instructions for obtaining an API 
 
 ## Deploying the Connector
 
-## Local Deployment
+### Local Deployment
 To run the connector locally, set the environment variables and run `npm start`.
 
 To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
+
+### Hosted Connector (Experimental)
+There is a community-supported hosted version of the connector which removes the need to deploy the connector to your own environment. To use the connector, install the [Touchnet Payment Helper Cloud App](https://developers.exlibrisgroup.com/appcenter/touchnet-payment-helper/), click the configuration menu, and enable the hosted connector. You need to supply an API key as described above.
+
+The URL for the hosted connector is:
+https://api.exldevnetwork.net/tn/touchnet
+
+_Note_: The hosted connector is currently only supported for Primo VE.
 
 ### Deploying to Heroku
 One easy way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has free plans (which could be appropriate depending on the level of usage) or very reasonable "hobby" plans. To deploy to Heroku, gather the parameters specified above and then click on the link below to sign up and deploy the connector. At the end of the process, Heroku will provide the URL for your connector. Use it to configure Primo in the following section.

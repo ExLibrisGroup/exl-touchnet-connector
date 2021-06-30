@@ -78,7 +78,7 @@ const generateTicketBody = (ticketName, options) => {
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>SUCCESS_LINK</typ:name>
-          <typ:value>${options.success}</typ:value>
+          <typ:value>${options.success}?institution=${options.institution}</typ:value>
       </typ:nameValuePairs>
       <typ:nameValuePairs>
           <typ:name>ERROR_LINK</typ:name>
@@ -121,6 +121,7 @@ const getSingleNode = (path, doc) => {
 }
 
 const cacheBust = uri => {
+  if (!uri) return '';
   let param = uri.indexOf('?') == -1 ? '?' : '';
   return uri + param + '&rand=' + Math.floor(Math.random() * Math.floor(1000000));
 }

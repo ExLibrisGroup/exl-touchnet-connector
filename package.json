@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",
+    "hosted:start": "sam local start-api --warm-containers EAGER --env-vars .env.hosted.json -t hosted.yaml",
+    "hosted:package": "aws cloudformation package --template ./hosted.yaml --s3-bucket almadtest --output-template hosted.packaged.yaml --region us-east-1 --s3-prefix sam",
+    "hosted:deploy": "npm run hosted:package && aws cloudformation deploy --template-file hosted.packaged.yaml --stack-name TouchnetConnectorHosted --capabilities CAPABILITY_IAM --region us-east-1",
+    "hosted:describe": "aws cloudformation describe-stacks --stack-name TouchnetConnectorHosted --region us-east-1 --query 'Stacks[0].Outputs[*].{Key:OutputKey,Value:OutputValue,Description:Description}' --output table",
     "dev": "node .test/primo.js & nodemon -r dotenv/config app/index.js",
     "lambdadev": "TARGET_PORT=3000 node test/primo.js & sam local start-api --env-vars test/env.json "
   },
