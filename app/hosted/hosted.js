@@ -47,6 +47,9 @@ const connector = async (event, context) => {
   } else if (event.queryStringParameters?.institution && event.requestContext.http.method == 'POST') {
     /* From Touchnet */
     ({ institution } = event.queryStringParameters);
+  } else if (event.queryStringParameters?.s) {
+    /* Cloud App */
+    return handleLambda(event, context);
   } else return unauthorized();
   let config = await getConfig(institution);
   if (Object.keys(config).length == 0) return error('Connector not configured for specified institution');

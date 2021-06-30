@@ -17,10 +17,10 @@ if (process.env.CERTIFICATE_KEY_FILE) {
 }
 
 let touchnet;
-const init = async () => {
+const init = async (touchnet_ws_url) => {
   if (!touchnet) {
     console.log('Initializing Touchnet');
-    touchnet = await TouchnetWS.init(process.env.TOUCHNET_WS_URL);
+    touchnet = await TouchnetWS.init(touchnet_ws_url || process.env.TOUCHNET_WS_URL);
   }
 }
 
@@ -47,11 +47,10 @@ app.get('/touchnet', async (request, response) => {
 
 const get = async (qs, returnUrl, referrer) => {
   if (!qs || !returnUrl) return 'Touchnet connector';
-  await init();
-  let user_id, total_sum, upay_site_id, upay_site_url, post_message = 'false', institution;
+  let user_id, total_sum, upay_site_id, upay_site_url, post_message = 'false', institution, touchnet_ws_url;
   if (qs.s) { 
     /* From CloudApp */
-    ({ user_id, total_sum, upay_site_id, upay_site_url } = JSON.parse(frombase64(qs.s)));
+    ({ user_id, total_sum, upay_site_id, upay_site_url, touchnet_ws_url } = JSON.parse(frombase64(qs.s)));
     post_message = 'true';
   } else if (qs.jwt) { 
     /* From Primo VE */
@@ -80,6 +79,7 @@ const get = async (qs, returnUrl, referrer) => {
 
   if (!user_id || total_sum <= 0) throw new Error('Nothing to pay');
 
+  await init(touchnet_ws_url);
   try {
     let ticket = await touchnet.generateTicket(user_id, {
       amount: total_sum,

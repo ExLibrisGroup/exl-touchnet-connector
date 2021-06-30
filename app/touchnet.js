@@ -121,6 +121,7 @@ const getSingleNode = (path, doc) => {
 }
 
 const cacheBust = uri => {
+  if (!uri) return '';
   let param = uri.indexOf('?') == -1 ? '?' : '';
   return uri + param + '&rand=' + Math.floor(Math.random() * Math.floor(1000000));
 }
