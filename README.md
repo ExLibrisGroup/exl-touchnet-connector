@@ -23,7 +23,13 @@ In addition, you'll need an API key for Alma. Instructions for obtaining an API 
 ## Deploying the Connector
 
 ### Local Deployment
-To run the connector locally, set the environment variables and run `npm start`.
+To run the connector locally on a machine with [Node.js](https://nodejs.org/en/g) installed, set the environment variables, clone the repository, install the dependencies, and then run `npm start`:
+```
+$ git clone https://github.com/ExLibrisGroup/exl-touchnet-connector
+$ cd exl-touchnet-connector
+$ npm install
+$ npm start
+```
 
 To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
 
