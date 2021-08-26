@@ -9,6 +9,9 @@ Parameters:
   ConfigSecretName:
     Type: String
     Default: TouchnetConnectorSecrets
+  CustomDomainPath:
+    Type: String
+    Default: tn
 
 Resources:
   # https://gist.github.com/jweisman/e7960060022b9b9af18b81c9366f3b45
@@ -19,6 +22,8 @@ Resources:
   TouchnetConnectorApi:
     Type: AWS::Serverless::HttpApi
     Properties:
+      StageVariables:
+        CustomDomainPath: !Sub '/${CustomDomainPath}'
       Auth:
         Authorizers:
           JWTAuthorizer:
@@ -155,7 +160,7 @@ Resources:
     Type: 'AWS::ApiGatewayV2::ApiMapping'
     Properties:
       DomainName: api.exldevnetwork.net
-      ApiMappingKey: tn
+      ApiMappingKey: !Ref CustomDomainPath
       ApiId: !Ref TouchnetConnectorApi
       Stage: $default
 

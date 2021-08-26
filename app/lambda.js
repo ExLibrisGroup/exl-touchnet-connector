@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
 };
 
 const connector = async (event) => {
-  const path = (event.requestContext.domainName == 'api.exldevnetwork.net' ? '/tn' : '') + event.requestContext.http.path;
+  const path = event.stageVariables?.CustomDomainPath + event.requestContext.http.path;
   const returnUrl = `${event.headers['x-forwarded-proto']}://${event.headers.host}${path}`.replace(/\/$/, "");
   const referrer = event.queryStringParameters?.returnUrl || event.headers['referer'];
 
