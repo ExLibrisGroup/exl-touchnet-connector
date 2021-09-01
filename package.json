@@ -15,7 +15,7 @@
   "author": "Josh Weisman",
   "license": "MIT",
   "dependencies": {
-    "almarestapi-lib": "^1.1.5",
+    "almarestapi-lib": "^1.1.6",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "request": "^2.88.0",
