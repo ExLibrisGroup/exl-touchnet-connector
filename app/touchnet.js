@@ -1,5 +1,5 @@
 const xpath      = require('xpath');
-const dom        = require('xmldom').DOMParser;
+const dom        = require('@xmldom/xmldom').DOMParser;
 const { requestp } = require('./utils');
 
 const select     = xpath.useNamespaces(

@@ -3,7 +3,7 @@ const jwt     = require('jsonwebtoken');
 const alma    = require('almarestapi-lib');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
-const dom = require('xmldom').DOMParser;
+const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const fs = require('fs');
 
