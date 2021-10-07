@@ -1,6 +1,6 @@
 {
   "name": "exl-touchnet-connector",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Connector between Ex Libris Alma and Primo and the Touchnet payment system",
   "main": "index.js",
   "scripts": {

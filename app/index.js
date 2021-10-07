@@ -1,14 +1,15 @@
 const express = require('express');
 const jwt     = require('jsonwebtoken');
-const alma    = require('almarestapi-lib');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
 const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
+const { getFees, payFees } = require('./alma');
 const fs = require('fs');
 
 const http = require('http');
 const https = require('https');
+const library = process.env.ALMA_LIBRARY_CODE || 'MAIN';
 let privateKey, certificate, credentials;
 if (process.env.CERTIFICATE_KEY_FILE) {
   privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
@@ -58,7 +59,6 @@ const get = async (qs, returnUrl, referrer) => {
     /* From Primo VE */
     try {
       ({ userName: user_id, institution } = jwt.decode(qs.jwt));
-      ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
       console.error("Error in retrieving user information:", e.message)
       throw new Error('Cannot retrieve user details information.');
@@ -72,13 +72,13 @@ const get = async (qs, returnUrl, referrer) => {
       const borinfo = await requestp({url});
       const node = require('xpath').select('/bor/bor_id/id', new dom().parseFromString(borinfo));
       user_id = node.length > 0 ? node[0].firstChild.data : null;
-      ({ total_sum } = await alma.getp(`/users/${user_id}/fees`));
     } catch (e) {
       console.error("Error in retrieving user information:", e.message)
       throw new Error('Cannot retrieve user details information.');
     }
   }
 
+  ({ total_sum } = await getFees(user_id, library));
   if (!user_id || total_sum <= 0) throw new Error('Nothing to pay');
 
   await init(touchnet_ws_url);
@@ -125,7 +125,7 @@ const success = async body => {
     if (post_message === 'true') {
       return responses.returnToReferrer(referrer, { amount: amount, external_transaction_id: receipt, user_id: user_id });
     } else {    
-      await alma.postp(`/users/${user_id}/fees/all?op=pay&amount=${amount}&method=ONLINE&external_transaction_id=${receipt}`, null);
+      await payFees(user_id, amount, receipt, library);
       console.log('Payment posted to Alma. Returning to referrer', referrer);
       return responses.returnToReferrer(referrer);
     }
