@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const http = require('http');
 const https = require('https');
-const library = process.env.ALMA_LIBRARY_CODE || 'MAIN';
+const library = process.env.ALMA_LIBRARY_CODE;
 let privateKey, certificate, credentials;
 if (process.env.CERTIFICATE_KEY_FILE) {
   privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
