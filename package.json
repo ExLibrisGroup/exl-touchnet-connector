@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",
+    "stop": "node app/server.stop.js",
     "hosted:start": "sam local start-api --warm-containers EAGER --env-vars .env.hosted.json -t hosted.yaml",
     "hosted:package": "aws cloudformation package --template ./hosted.yaml --s3-bucket almadtest --output-template hosted.packaged.yaml --region us-east-1 --s3-prefix sam",
     "hosted:deploy": "npm run hosted:package && aws cloudformation deploy --template-file hosted.packaged.yaml --stack-name TouchnetConnectorHosted --capabilities CAPABILITY_IAM --region us-east-1",
@@ -15,11 +16,13 @@
   "author": "Josh Weisman",
   "license": "MIT",
   "dependencies": {
+    "@xmldom/xmldom": "^0.7.0",
     "almarestapi-lib": "^1.1.6",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "request": "^2.88.0",
-    "@xmldom/xmldom": "^0.7.0",
+    "socket.io": "^4.4.0",
+    "socket.io-client": "^4.4.0",
     "xpath": "0.0.27"
   },
   "devDependencies": {

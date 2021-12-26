@@ -140,7 +140,18 @@ app.get('/touchnet/error', (request, response) => {
 })
 
 // app.listen(PORT);
-http.createServer(app).listen(PORT);
+const server = http.createServer(app)
+server.listen(PORT);
 if (credentials) https.createServer(credentials, app).listen(SECURE_PORT);
+
+// We are only using socket.io here to respond to the npmStop signal
+// To support IPC (Inter Process Communication) AKA RPC (Remote P.C.)
+
+const io = require('socket.io')(server);
+io.on('connection', (socketServer) => {
+  socketServer.on('npmStop', () => {
+    process.exit(0);
+  });
+});
 
 module.exports = { get, success };
