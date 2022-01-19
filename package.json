@@ -1,6 +1,6 @@
 {
   "name": "exl-touchnet-connector",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Connector between Ex Libris Alma and Primo and the Touchnet payment system",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "author": "Josh Weisman",
   "license": "MIT",
   "dependencies": {
-    "almarestapi-lib": "^1.1.6",
+    "almarestapi-lib": "^1.1.8",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "request": "^2.88.0",
