@@ -66,7 +66,12 @@ const touchnetRequest = (uri, auth, xml) => {
   return requestp(options);
 }
 
-const generateTicketBody = (ticketName, options) => {
+const generateTicketBody = (user_id, options) => {
+  let d = new Date,
+    dformat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('-') + '_' +
+              [d.getHours(), d.getMinutes(), d.getSeconds()].join('');
+  let ticketName = user_id+"_"+dformat;
+  
   return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://types.secureLink.touchnet.com">
   <soapenv:Header/>
   <soapenv:Body>
