@@ -42,7 +42,7 @@ https://api.exldevnetwork.net/tn/touchnet
 _Note_: The hosted connector is not guaranteed to work, and isn't supported.
 
 ### Deploying to Heroku
-One easy way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has free plans (which could be appropriate depending on the level of usage) or very reasonable "hobby" plans. To deploy to Heroku, gather the parameters specified above and then click on the link below to sign up and deploy the connector. At the end of the process, Heroku will provide the URL for your connector. Use it to configure Primo in the following section.
+One easy way to deploy the connector is to use the [Heroku platform](https://heroku.com). Heroku has very reasonable "hobby" plans (which could be appropriate depending on the level of usage). To deploy to Heroku, gather the parameters specified above and then click on the link below to sign up and deploy the connector. At the end of the process, Heroku will provide the URL for your connector. Use it to configure Primo in the following section.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
