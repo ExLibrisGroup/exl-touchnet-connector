@@ -1,22 +1,22 @@
-# Ex Libris Touchnet Connector
-This connector enables libraries from universities that use [Touchnet](https://www.touchnet.com/en) payment services to accept payment of fines and fees. The university can set up a link to the connector in the discovery system. When the patron clicks on the "Pay Fines" link, the conenctor will set up the payment and direct the patron to Touchnet to pay. Successfully completed payments are posted to the patron's account in Alma.
+# Ex Libris TouchNet Connector
+This connector enables libraries from universities that use [TouchNet](https://www.touchnet.com/en) payment services to accept payment of fines and fees. The university can set up a link to the connector in the discovery system. When the patron clicks on the "Pay Fines" link, the conenctor will set up the payment and direct the patron to TouchNet to pay. Successfully completed payments are posted to the patron's account in Alma.
 
 ## Overview
 This connector performs the following tasks:
-* Set up the payment in Touchnet and redirect to the Touchnet site for payment
-* Receive the response from Touchnet and post the payment to Alma
+* Set up the payment in TouchNet and redirect to the TouchNet site for payment
+* Receive the response from TouchNet and post the payment to Alma
 * Redirect the user back to Primo
 
-![EXL Touchnet Connector Flow](https://i.postimg.cc/R04xpMGJ/exl-touchnet-flow.png)
+![EXL TouchNet Connector Flow](https://i.postimg.cc/R04xpMGJ/exl-touchnet-flow.png)
 
-*No PCI* information is handled by the connector. All of the payment information is entered only in the Touchnet site.
+*No PCI* information is handled by the connector. All of the payment information is entered only in the TouchNet site.
 
 ## Configuring the Connector
-In order to use the connector, you need to coordinate with Touchnet customer service. They will provide the following two pieces of information:
+In order to use the connector, you need to coordinate with TouchNet customer service. They will provide the following two pieces of information:
 * uPay Site ID, stored in the `UPAY_SITE_ID` environment variable
 * uPay Site URL, stored in the `UPAY_SITE_URL` environment variable
 
-The production Touchnet Web Service URL is hardcoded in the service. If you're testing the connector in the Touchnet test environment, set the `TOUCHNET_WS_URL` environment variable to the value provided by Touchnet.
+The production TouchNet Web Service URL is hardcoded in the service. If you're testing the connector in the TouchNet test environment, set the `TOUCHNET_WS_URL` environment variable to the value provided by TouchNet.
 
 In addition, you'll need an API key for Alma. Instructions for obtaining an API key are available at the [Ex Libris Developer Network](https://developers.exlibrisgroup.com/alma/apis). The API key should include read/write permissions for "users". The API key is stored in the `ALMA_APIKEY` environment variable.
 
@@ -34,7 +34,7 @@ $ npm start
 To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
 
 ### Hosted Connector for Primo VE (Deprecated)
-There is a community-supported hosted version of the connector which removes the need to deploy the connector to your own environment. To use the connector, install the [Touchnet Payment Helper Cloud App](https://developers.exlibrisgroup.com/appcenter/touchnet-payment-helper/), click the configuration menu, and enable the hosted connector. You need to supply an API key as described above.
+There is a community-supported hosted version of the connector which removes the need to deploy the connector to your own environment. To use the connector, install the [TouchNet Payment Helper Cloud App](https://developers.exlibrisgroup.com/appcenter/touchnet-payment-helper/), click the configuration menu, and enable the hosted connector. You need to supply an API key as described above.
 
 The URL for the hosted connector is:
 https://api.exldevnetwork.net/tn/touchnet
@@ -51,7 +51,7 @@ Another option for deploying the connector is to use Amazon Web Services (AWS). 
 
 1. Click on [this link](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://almadtest.s3.amazonaws.com/sam/exl-touchnet-connector/cloudformation.packaged.yaml&stackName=ExlTouchnetConnector) to open the AWS console.
 1. Fill in the specified parameters and check off the boxes in the *Capabilities and transforms* section and then click the *Create stack* button
-1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section. The public IP address will also appear in the *Outputs* tab. This IP may be given to Touchnet to enable access to the Touchnet API.
+1. AWS will create the necessary components. When it's complete, the stack will be in the *CREATE_COMPLETE* state. Click the *Outputs* tab to view the URL for the connector. You will use the URL to configure Primo in the following section. The public IP address will also appear in the *Outputs* tab. This IP may be given to TouchNet to enable access to the TouchNet API.
 
 For a walkthrough of the installation and configuration process on AWS, see [this video](https://youtu.be/9TJiIljRTro).
 
