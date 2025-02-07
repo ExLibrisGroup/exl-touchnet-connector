@@ -1,5 +1,5 @@
 # Ex Libris Touchnet Connector
-This connector enables libraries from universities that use [Touchnet](https://www.touchnet.com/en) payment services to accept payment of fines and fees. The university can set up a link to the connector in the discovery system. When the patron clicks on the "Pay Fines" link, the conenctor will set up the payment and direct the patron to Touchnet to pay. Successfully completed payments are posted to the patron's account in Alma.
+This connector enables libraries from universities that use [Touchnet](https://www.touchnet.com/en) payment services to accept payment of fines and fees. The university can set up a link to the connector in the discovery system. When the patron clicks on the "Pay Fines" link, the connector will set up the payment and direct the patron to Touchnet to pay. Successfully completed payments are posted to the patron's account in Alma.
 
 ## Overview
 This connector performs the following tasks:
@@ -71,7 +71,7 @@ To add the "Pay Fines" link to Primo VE, follow the instructions in this [online
 ![Primo](https://i.postimg.cc/CK7TWW6P/exl-touchnet-primo.png)
 
 ### Configuration in Primo Classic (new UI)
-To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link) to declare a Pay Fine Link. For the Link URL, specify the URL of the connector, and add the `pds_handle` query striong parameter and the *Primo institution code* (not the Alma code) in the URL. For example:
+To add the "Pay Fines" link to Primo Classic (new UI), follow the instructions in this [online help entry](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/010Alma_Online_Help_(English)/060Alma-Primo_Integration/040Configuring_the_Primo_Front_End_for_an_Alma_Data_Source/070My_Account#Configuring_the_Pay_Fine_Link) to declare a Pay Fine Link. For the Link URL, specify the URL of the connector, and add the `pds_handle` query string parameter and the *Primo institution code* (not the Alma code) in the URL. For example:
 ```
 https://exl-touchnet-connector-myuni.herokuapps.com/touchnet?institution=<<INSTITUTION_CODE>>&pds_handle={{pds_handle}}
 ```
