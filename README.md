@@ -33,6 +33,8 @@ $ npm start
 
 To run the connector in HTTPS, set the `CERTIFICATE_KEY_FILE` and `CERTIFICATE_CRT_FILE` to the path of the desired plain text certificate and key files.
 
+To disable HTTP, set the environment variable `HTTPS_ONLY`. If `HTTPS_ONLY` is set, then CERTIFICATE_KEY_FILE and CERTIFICATE_CRT_FILE must also be set. Otherwise, starting the server will print a message and exit.
+
 ### Hosted Connector for Primo VE (Deprecated)
 There is a community-supported hosted version of the connector which removes the need to deploy the connector to your own environment. To use the connector, install the [TouchNet Payment Helper Cloud App](https://developers.exlibrisgroup.com/appcenter/touchnet-payment-helper/), click the configuration menu, and enable the hosted connector. You need to supply an API key as described above.
 
