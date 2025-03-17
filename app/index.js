@@ -48,6 +48,10 @@ app.get('/touchnet', async (request, response) => {
   const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
   const referrer = request.query.returnUrl || request.header('Referer');
 
+  if (referrer && typeof referrer !== 'string') {
+    return response.status(400).send('Malformed returnUrl');
+  }
+
   try {
     const resp = await get(request.query, returnUrl, referrer);
     response.send(resp);
