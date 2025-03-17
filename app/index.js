@@ -17,6 +17,14 @@ if (process.env.CERTIFICATE_KEY_FILE) {
   credentials = {key: privateKey, cert: certificate};
 }
 
+const HTTPS_ONLY = !!process.env.HTTPS_ONLY;
+if (HTTPS_ONLY && !credentials) {
+  console.error('HTTPS_ONLY is set but no certificate files are provided. Exiting.');
+  process.exit(1);
+}
+
+console.log('Starting Touchnet connector');
+
 let touchnet;
 const init = async (touchnet_ws_url) => {
   if (!touchnet) {
@@ -139,8 +147,7 @@ app.get('/touchnet/error', (request, response) => {
   response.status(400).send('An error has occurred');
 })
 
-// app.listen(PORT);
-http.createServer(app).listen(PORT);
+if (!HTTPS_ONLY) http.createServer(app).listen(PORT);
 if (credentials) https.createServer(credentials, app).listen(SECURE_PORT);
 
 module.exports = { get, success };
