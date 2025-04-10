@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt     = require('jsonwebtoken');
+const escapeHtml = require('escape-html');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
 const dom = require('@xmldom/xmldom').DOMParser;
@@ -54,9 +55,9 @@ app.get('/touchnet', async (request, response) => {
 
   try {
     const resp = await get(request.query, returnUrl, referrer);
-    response.send(resp);
+    response.send(escapeHtml(resp));
   } catch (e) {
-    return response.status(400).send(e.message);
+    return response.status(400).send(escapeHtml(e.message));
   }
 })
 
@@ -115,9 +116,9 @@ const get = async (qs, returnUrl, referrer) => {
 app.post('/touchnet/success', async (request, response) => {
   try {
     const resp = await success(request.body);
-    response.send(resp);
+    response.send(escapeHtml(resp));
   } catch(e) {
-    return response.status(400).send(e.message);
+    return response.status(400).send(escapeHtml(e.message));
   }
 })
 
