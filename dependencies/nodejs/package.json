@@ -3,7 +3,7 @@
     "@xmldom/xmldom": "^0.7.0",
     "almarestapi-lib": "^1.1.9",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "request": "^2.88.0",
     "xpath": "0.0.27"
   }
