@@ -1,3 +1,4 @@
+const { Buffer } = require('buffer');
 const request    = require('request');
 
 const frombase64 = ( str ) => Buffer.from(str, 'base64').toString();

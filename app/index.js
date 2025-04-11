@@ -7,6 +7,7 @@ const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
 const fs = require('fs');
+const process = require('process');
 
 const http = require('http');
 const https = require('https');
