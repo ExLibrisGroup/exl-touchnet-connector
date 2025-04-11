@@ -127,6 +127,8 @@ const getSingleNode = (path, doc) => {
 
 const cacheBust = uri => {
   if (!uri) return '';
+  // Coerce to a string, just in case a bug or permissive setting allows a non-string.
+  uri = '' + uri;
   let param = uri.indexOf('?') == -1 ? '?' : '';
   return uri + param + '&rand=' + Math.floor(Math.random() * 1000000);
 }
