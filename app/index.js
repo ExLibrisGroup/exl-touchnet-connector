@@ -55,7 +55,7 @@ app.get('/touchnet', async (request, response) => {
 
   try {
     const resp = await get(request.query, returnUrl, referrer);
-    response.send(escapeHtml(resp));
+    response.send(resp);
   } catch (e) {
     return response.status(400).send(escapeHtml(e.message));
   }
@@ -116,7 +116,7 @@ const get = async (qs, returnUrl, referrer) => {
 app.post('/touchnet/success', async (request, response) => {
   try {
     const resp = await success(request.body);
-    response.send(escapeHtml(resp));
+    response.send(resp);
   } catch(e) {
     return response.status(400).send(escapeHtml(e.message));
   }
