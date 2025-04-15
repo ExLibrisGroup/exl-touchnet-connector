@@ -64,6 +64,7 @@ app.get('/touchnet', async (request, response) => {
 const get = async (qs, returnUrl, referrer) => {
   if (!qs || !returnUrl) return 'Touchnet connector';
   let user_id, total_sum, upay_site_id, upay_site_url, post_message = 'false', institution, touchnet_ws_url;
+
   if (qs.s) { 
     /* From CloudApp */
     ({ user_id, total_sum, upay_site_id, upay_site_url, touchnet_ws_url } = JSON.parse(frombase64(qs.s)));
@@ -95,8 +96,14 @@ const get = async (qs, returnUrl, referrer) => {
   if (!user_id || total_sum <= 0) throw new Error('Nothing to pay');
 
   await init(touchnet_ws_url);
+
+  const d = new Date();
+  const dformat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('-') + '_' +
+            [d.getHours(), d.getMinutes(), d.getSeconds()].join('');
+  const ticketName = user_id+"_"+dformat
+
   try {
-    let ticket = await touchnet.generateTicket(user_id, {
+    let ticket = await touchnet.generateTicket(ticketName, {
       amount: total_sum,
       success: returnUrl + '/success',
       error: returnUrl + '/error',
@@ -106,7 +113,7 @@ const get = async (qs, returnUrl, referrer) => {
       institution
     });
     console.log('Successfully created ticket', ticket);
-    return responses.redirectForm(ticket, user_id, upay_site_id, upay_site_url);
+    return responses.redirectForm(ticket, ticketName, upay_site_id, upay_site_url);
   } catch (e) {
     console.error("Error in setting up payment:", e.message)
     throw new Error('Cannot prepare payment information.');
