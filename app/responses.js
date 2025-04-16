@@ -1,9 +1,9 @@
-const redirectForm = (ticket, user_id, upay_site_id, upay_site_url) => {
+const redirectForm = (ticket, ticket_name, upay_site_id, upay_site_url) => {
   return `
     <form method="post" action="${upay_site_url || process.env.UPAY_SITE_URL}" name="touchnet">
       <input type="hidden" name="UPAY_SITE_ID" value="${upay_site_id || process.env.UPAY_SITE_ID}">
       <input type="hidden" name="TICKET" value="${ticket}">
-      <input type="hidden" name="TICKET_NAME" value="${user_id}">
+      <input type="hidden" name="TICKET_NAME" value="${ticket_name}">
     </form>
     Redirecting to payment site.
     <script>
