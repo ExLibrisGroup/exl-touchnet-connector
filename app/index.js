@@ -97,10 +97,7 @@ const get = async (qs, returnUrl, referrer) => {
 
   await init(touchnet_ws_url);
 
-  const d = new Date();
-  const dformat = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('-') + '_' +
-            [d.getHours(), d.getMinutes(), d.getSeconds()].join('');
-  const ticketName = user_id+"_"+dformat
+  const ticketName = user_id + "_" + Date.now();
 
   try {
     let ticket = await touchnet.generateTicket(ticketName, {
