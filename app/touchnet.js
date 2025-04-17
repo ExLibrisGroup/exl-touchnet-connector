@@ -1,3 +1,4 @@
+const process    = require('process');
 const xpath      = require('xpath');
 const dom        = require('@xmldom/xmldom').DOMParser;
 const { requestp } = require('./utils');

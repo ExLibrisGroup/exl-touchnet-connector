@@ -15,7 +15,7 @@ const payFees = async (user_id, amount, transaction_id, library = null) => {
     return await alma.postp(`/users/${user_id}/fees/all?op=pay&amount=${amount}&method=ONLINE&external_transaction_id=${transaction_id}`, null);
   
   const fees = await getFees(user_id, library);
-  for (i = 0; i < fees.fee.length; i++) {
+  for (let i = 0; i < fees.fee.length; i++) {
     if (amount <= 0) break;
     const fee = fees.fee[i];
     const to_pay = Math.min(amount, fee.balance);

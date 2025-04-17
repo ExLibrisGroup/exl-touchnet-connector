@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const process = require('process');
 
 AWS.config.update({region: 'us-east-1'});
 const sm = new AWS.SecretsManager();

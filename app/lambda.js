@@ -1,7 +1,8 @@
+const { Buffer } = require('buffer');
 const { parse }       = require('querystring');
 const { get, success } = require('./index');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event /*, context */) => {
   const { path, method } = event.requestContext.http;
   let response;
   if (path.startsWith('/touchnet/success') && method == 'POST') {

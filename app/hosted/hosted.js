@@ -1,6 +1,7 @@
+const process = require('process');
 const jwt = require('jsonwebtoken');
 const alma    = require('almarestapi-lib');
-const { success, notfound, error, unauthorized, nocontent } = require('./aws-apigateway-responses');
+const { success, notfound, error, unauthorized } = require('./aws-apigateway-responses');
 const { fixEvent } = require('utils');
 const { getConfig, setConfig, deleteConfig } = require('./configuration');
 const { handler: handleLambda } = require('../lambda');
@@ -14,13 +15,15 @@ const handler = async (event, context) => {
   try {
     switch (event.routeKey) {
       case 'GET /config':
-        let config = await getConfig(inst_code);
-        if (config.alma_apikey) {
-          const re = new RegExp(`^.{1,${config.alma_apikey.length-5}}`,"g");
-          config.alma_apikey = config.alma_apikey.replace(re, m => "*".repeat(m.length))
+        {
+          let config = await getConfig(inst_code);
+          if (config.alma_apikey) {
+            const re = new RegExp(`^.{1,${config.alma_apikey.length-5}}`,"g");
+            config.alma_apikey = config.alma_apikey.replace(re, m => "*".repeat(m.length))
+          }
+          result = success(config);
+          break;
         }
-        result = success(config);
-        break;
       case 'PUT /config':
         result = success(await setConfig(inst_code, JSON.parse(event.body||'{}')));
         break;  
