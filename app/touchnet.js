@@ -42,7 +42,7 @@ class TouchnetWS {
     let response = await touchnetRequest(this.uri, this.auth, authorizeBody(session_id));
     return {
       receipt:  getSingleNode('/soapenv:Envelope/soapenv:Body/tn:authorizeAccountResponse/tn:creditResponse/tn:receiptNumber', response),
-      user_id:  getSingleNode('/soapenv:Envelope/soapenv:Body/tn:authorizeAccountResponse/tn:ticketName', response),
+      user_id:  getSingleNode('/soapenv:Envelope/soapenv:Body/tn:authorizeAccountResponse/tn:ticketName', response).replace(/_\d+$/, ''),
       referrer: getSingleNode('/soapenv:Envelope/soapenv:Body/tn:authorizeAccountResponse/tn:nameValuePairs[tn:name="REFERRER"]/tn:value', response),
       post_message: getSingleNode('/soapenv:Envelope/soapenv:Body/tn:authorizeAccountResponse/tn:nameValuePairs[tn:name="POST_MESSAGE"]/tn:value', response)
     }
