@@ -4,7 +4,7 @@ const escapeHtml = require('escape-html');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
 const dom = require('@xmldom/xmldom').DOMParser;
-const { requestp, frombase64 } = require('./utils');
+const { frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
 const fs = require('fs');
 const process = require('process');
@@ -84,7 +84,8 @@ const get = async (qs, returnUrl, referrer) => {
       const ref = new URL(referrer);
       const url = `${ref.protocol}//${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${qs.institution}&pds_handle=${qs.pds_handle}`;
       console.log('retrieving borinfo from', url);
-      const borinfo = await requestp({url});
+      const response = await fetch(url);
+      const borinfo = await response.text();
       const node = require('xpath').select('/bor/bor_id/id', new dom().parseFromString(borinfo));
       user_id = node.length > 0 ? node[0].firstChild.data : null;
     } catch (e) {
