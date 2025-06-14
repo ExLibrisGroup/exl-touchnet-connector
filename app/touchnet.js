@@ -1,7 +1,6 @@
 const process    = require('process');
 const xpath      = require('xpath');
 const dom        = require('@xmldom/xmldom').DOMParser;
-const { requestp } = require('./utils');
 
 const select     = xpath.useNamespaces(
   {
@@ -22,10 +21,14 @@ class TouchnetWS {
   async _init(uri) {
     let data;
     try {
-      data = await requestp({
-        url: "http://eu-st01.ext.exlibrisgroup.com/delivery/touchnet/settings.json", 
-        json:true
-      });
+      const response = await fetch("https://eu-st01.ext.exlibrisgroup.com/delivery/touchnet/settings.json");
+      if (!response.ok) {
+        throw new Error('Network request failed');
+      }
+      data = await response.json();
+      if (!data.TOUCHNET_WS_URL || !data.TOUCHNET_WS_AUTH) {
+        throw new Error('Missing required TouchNet settings');
+      }
     } catch(e) {
       console.error('Error creating TouchetWS client', e); 
       process.exit(1) 
@@ -52,19 +55,22 @@ class TouchnetWS {
 
 module.exports = TouchnetWS;
 
-const touchnetRequest = (uri, auth, xml) => {
+const touchnetRequest = async (uri, auth, xml) => {
   let options = {
-    url: uri,
     method: 'POST',
     body: xml,
-    headers: {
+    headers: new Headers({
       'Content-Type':'text/xml;charset=utf-8',
       'Authorization': 'Basic ' + auth,
       'Content-Length':xml.length,
       'SOAPAction':""
-    }
+    })
   };
-  return requestp(options);
+  const response = await fetch(uri, options);
+  if (!response.ok) {
+    throw new Error('Network request failed');
+  }
+  return await response.text();
 }
 
 const generateTicketBody = (ticketName, options) => {
