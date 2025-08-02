@@ -1,6 +1,6 @@
 const process = require('process');
 const jwt = require('jsonwebtoken');
-const alma    = require('almarestapi-lib');
+const alma    = require('../alma');
 const { success, notfound, error, unauthorized } = require('./aws-apigateway-responses');
 const { fixEvent } = require('utils');
 const { getConfig, setConfig, deleteConfig } = require('./configuration');
