@@ -82,7 +82,27 @@ const get = async (qs, returnUrl, referrer) => {
     /* From Primo Classic */
     try {
       const ref = new URL(referrer);
-      const url = `${ref.protocol}//${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${qs.institution}&pds_handle=${qs.pds_handle}`;
+      // Validate that the referrer is using HTTPS.
+      if (ref.protocol !== 'https:') {
+        throw new Error('Insecure referrer');
+      }
+      // Validate that the referrer host is in an expected format sufficient to
+      // prevent shenanigans.
+      const validHostnamePattern = /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*\.?(:\d{1,5})?$/;
+      if (!ref.host || !validHostnamePattern.test(ref.host)) {
+        throw new Error('Invalid referrer host');
+      }
+      // Validate institution code.
+      // Primo institution codes can only contain uppercase letters.
+      if (!qs.institution || /[^A-Z]/.test(qs.institution)) {
+        throw new Error('Missing or invalid institution code');
+      }
+      // Validate pds_handle.
+      // Primo pds_handles can only contain digits.
+      if (/[^0-9]/.test(qs.pds_handle)) {
+        throw new Error('Invalid pds_handle');
+      }
+      const url = `https://${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${qs.institution}&pds_handle=${qs.pds_handle}`;
       console.log('retrieving borinfo from', url);
       const response = await fetch(url);
       const borinfo = await response.text();
