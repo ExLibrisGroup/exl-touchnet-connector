@@ -4,7 +4,7 @@
   "description": "Connector between Ex Libris Alma and Primo and the Touchnet payment system",
   "main": "index.js",
   "scripts": {
-    "test": "eslint .",
+    "test": "eslint . && jest",
     "start": "node app/index.js",
     "hosted:start": "sam local start-api --warm-containers EAGER --env-vars .env.hosted.json -t hosted.yaml",
     "hosted:package": "aws cloudformation package --template ./hosted.yaml --s3-bucket almadtest --output-template hosted.packaged.yaml --region us-east-1 --s3-prefix sam",
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "eslint": "^9.24.0",
-    "globals": "^16.0.0"
+    "globals": "^16.0.0",
+    "jest": "^30.2.0"
   }
 }
