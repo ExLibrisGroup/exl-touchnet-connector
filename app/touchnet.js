@@ -10,8 +10,6 @@ const select     = xpath.useNamespaces(
 )
 
 class TouchnetWS {
-  constructor() { }
-
   static async init(uri) {
     const o = new TouchnetWS();
     await o._init(uri);
@@ -30,7 +28,7 @@ class TouchnetWS {
         throw new Error('Missing required TouchNet settings');
       }
     } catch(e) {
-      console.error('Error creating TouchetWS client', e); 
+      console.error('Error creating TouchnetWS client', e); 
       process.exit(1) 
     }
     this.uri = uri || data.TOUCHNET_WS_URL;
@@ -53,8 +51,6 @@ class TouchnetWS {
   }
 }
 
-module.exports = TouchnetWS;
-
 const touchnetRequest = async (uri, auth, xml) => {
   let options = {
     method: 'POST',
@@ -74,6 +70,9 @@ const touchnetRequest = async (uri, auth, xml) => {
 }
 
 const generateTicketBody = (ticketName, options) => {
+  if (/[^a-zA-Z0-9_-]/.test(ticketName)) {
+    throw new Error('Invalid characters in ticketName');
+  }
   return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://types.secureLink.touchnet.com">
   <soapenv:Header/>
   <soapenv:Body>
@@ -134,3 +133,5 @@ const cacheBust = uri => {
   let param = uri.indexOf('?') == -1 ? '?' : '';
   return uri + param + '&rand=' + Math.floor(Math.random() * 1000000);
 }
+
+module.exports = TouchnetWS;
