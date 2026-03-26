@@ -46,6 +46,7 @@ const handler = async (event, context) => {
 const connector = async (event, context) => {
   let institution;
   if (event.queryStringParameters?.jwt) {
+    // See comment in index.js: the JWT is decoded only, not verified.
     ({ institution } = jwt.decode(event.queryStringParameters.jwt));
   } else if (event.queryStringParameters?.institution && event.requestContext.http.method == 'POST') {
     /* From Touchnet */
