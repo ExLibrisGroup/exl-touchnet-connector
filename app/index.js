@@ -72,6 +72,10 @@ const get = async (qs, returnUrl, referrer) => {
     post_message = 'true';
   } else if (qs.jwt) { 
     /* From Primo VE */
+    // The JWT is decoded but not signature-verified. It carries the patron's
+    // user ID as a convenience from Primo — it is not used as an auth
+    // credential. Requiring operators to configure a public key would
+    // add setup complexity with no meaningful security benefit.
     try {
       ({ userName: user_id, institution } = jwt.decode(qs.jwt));
     } catch (e) {
