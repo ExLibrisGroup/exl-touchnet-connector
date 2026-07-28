@@ -12,11 +12,27 @@ const process = require('process');
 const http = require('http');
 const https = require('https');
 const library = process.env.ALMA_LIBRARY_CODE;
+const TLS_CIPHERS = [
+  // TLS 1.3 cipher suites
+  'TLS_AES_256_GCM_SHA384',
+  'TLS_CHACHA20_POLY1305_SHA256',
+  'TLS_AES_128_GCM_SHA256',
+  // TLS 1.2 cipher suites with forward secrecy
+  'ECDHE-RSA-AES256-GCM-SHA384',
+  'ECDHE-RSA-CHACHA20-POLY1305',
+  'ECDHE-RSA-AES128-GCM-SHA256'
+].join(':');
 let privateKey, certificate, credentials;
 if (process.env.CERTIFICATE_KEY_FILE) {
   privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
   certificate = fs.readFileSync(process.env.CERTIFICATE_CRT_FILE, 'utf8');
-  credentials = {key: privateKey, cert: certificate};
+  credentials = {
+    key: privateKey,
+    cert: certificate,
+    minVersion: 'TLSv1.2',
+    honorCipherOrder: true,
+    ciphers: TLS_CIPHERS
+  };
 }
 
 const HTTPS_ONLY = !!process.env.HTTPS_ONLY;
